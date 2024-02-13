@@ -91,12 +91,6 @@ class CfgVehicles {
         function = QFUNC(moduleAttachFlag);
         icon = QPATHTOF(ui\flag_ca.paa);
     };
-    class GVAR(moduleAttachTo): GVAR(moduleBase) {
-        curatorCanAttach = 1;
-        category = QGVAR(Objects);
-        displayName = CSTRING(ModuleAttachTo);
-        function = QFUNC(moduleAttachTo);
-    };
     class GVAR(moduleBindVariable): GVAR(moduleBase) {
         curatorCanAttach = 1;
         category = QGVAR(DevTools);
@@ -352,6 +346,7 @@ class CfgVehicles {
         category = QGVAR(Objects);
         displayName = CSTRING(ScaleObject);
         function = QFUNC(moduleScaleObject);
+        icon = "\a3\3den\Data\Cfg3DEN\History\scaleItems_ca.paa";
     };
     class GVAR(moduleSearchBuilding): GVAR(moduleBase) {
         curatorCanAttach = 1;

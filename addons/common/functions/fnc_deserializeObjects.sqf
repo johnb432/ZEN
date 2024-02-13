@@ -105,7 +105,7 @@ private _fnc_deserializeUnit = {
     [{
         params ["_unit", "_loadout"];
 
-        _unit setUnitLoadout _loadout;
+        [_unit, _loadout] call CBA_fnc_setLoadout;
         [_unit] call BIN_fnc_CBRNHoseInit;
     }, [_unit, _loadout]] call CBA_fnc_execNextFrame;
 
@@ -285,7 +285,7 @@ private _fnc_deserializeObject = {
 } forEach _objectData;
 
 if (_makeEditable) then {
-    [QGVAR(addObjects), [_objects]] call CBA_fnc_serverEvent;
+    [_objects] call FUNC(updateEditableObjects);
 };
 
 _objects

@@ -56,6 +56,7 @@ if (GVAR(disableLiveSearch)) then {
 };
 
 _display displayAddEventHandler ["KeyDown", {call FUNC(handleKeyDown)}];
+_display displayAddEventHandler ["KeyUp", {call FUNC(handleKeyUp)}];
 
 {
     private _ctrl = _display displayCtrl _x;
@@ -110,6 +111,18 @@ _ctrlTreeRecent ctrlAddEventHandler ["TreeSelChanged", {
     };
 }];
 
+// Trigger events when the tree collapse and expand all buttons are clicked
+{
+    private _ctrlTreeButton = _display displayCtrl _x;
+    _ctrlTreeButton ctrlAddEventHandler ["ButtonClick", {
+        params ["_ctrlTreeButton"];
+
+        private _display = ctrlParent _ctrlTreeButton;
+        private _expand = ctrlIDC _ctrlTreeButton == IDC_EXPAND_ALL;
+        [QGVAR(treeButtonClicked), [_display, _expand]] call CBA_fnc_localEvent;
+    }];
+} forEach [IDC_COLLAPSE_ALL, IDC_EXPAND_ALL];
+
 // Initially open the map fully zoomed out and centered
 if (isNil QGVAR(previousMapState)) then {
     GVAR(previousMapState) = [1, [worldSize / 2, worldSize / 2]];
@@ -148,11 +161,11 @@ GVAR(iconsVisible) = true;
 
         [QGVAR(treesLoaded), _display] call CBA_fnc_localEvent;
 
-        [_display] call FUNC(addGroupIcons);
+        // Decluttering empty tree first since this will potentially reduce the number
+        // of entries that need to be processed by the subsequent functions
         [_display] call FUNC(declutterEmptyTree);
-
-        // Initially fix side buttons (can be hidden if a tree has no entries)
-        [FUNC(fixSideButtons), _display] call CBA_fnc_execNextFrame;
+        [_display] call FUNC(addGroupIcons);
+        [_display] call FUNC(addModIcons);
 
         {
             private _ctrl = _display displayCtrl _x;
